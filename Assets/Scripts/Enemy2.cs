@@ -10,10 +10,12 @@ public class Enemy2 : MonoBehaviour // Enemy class inherits from MonoBehaviour (
     private int squareSide = 0; // Current side of square being traversed (0=right, 1=up, 2=left, 3=down)
     private float distanceTraveled = 0f; // Distance traveled along current side of square (in units)
     private Vector3 squareStartPos; // Starting position of the square path
-    
+     public GameObject explosionPrefab; // Reference to the explosion prefab GameObject (assigned in Unity Inspector) - used to spawn explosion effect when enemy dies
+    private GameManager gameManager; // Reference to the GameManager component - used to access game management functions like adding score
     void Start() // Called once when the GameObject is first created/activated
     {
         squareStartPos = transform.position; // Store initial position as square starting point
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>(); // Find the GameManager object in the scene and get its GameManager component script
     }
 
     void Update() // Called every frame (typically 60 times per second)
@@ -22,16 +24,27 @@ public class Enemy2 : MonoBehaviour // Enemy class inherits from MonoBehaviour (
         EnemyMovementSquare(); // Execute square movement pattern every frame
     }
     
-    void OnTriggerEnter(Collider other) // Called when this GameObject's trigger collider enters another collider (3D)
+    void OnTriggerEnter(Collider other) // Called when this GameObject's trigger collider enters another collider (3D) - handles collision detection
     {
         // Die if hit by bullet
         if(other.gameObject.CompareTag("Bullet")) // Check if the colliding object has the "Bullet" tag
         {
             Destroy(other.gameObject); // Destroy the bullet GameObject that hit the enemy
+            GameObject explosion = Instantiate(explosionPrefab, transform.position, transform.rotation); // Create an explosion effect at the enemy's current position and rotation
+            Destroy(explosion, 0.3f); // Destroy the explosion GameObject after 0.3 seconds (allows animation to play)
+            gameManager.AddScore(10); // Add 10 points to the player's score via the GameManager
             Destroy(gameObject); // Destroy this enemy GameObject
-            Debug.Log("Enemy hit by bullet and died"); // Print message to console for debugging
+            Debug.Log("Enemy hit by bullet and died"); // Print message to console for debugging purposes
         }
-
+        // Die if hit by bullet
+        else if(other.gameObject.CompareTag("Player")) // Check if the colliding object has the "Player" tag
+        {
+            other.GetComponent<PlayerController>().LoseALife(); // Get Player component from colliding object and call LoseALife method
+            GameObject explosion = Instantiate(explosionPrefab, transform.position, transform.rotation); // Create an explosion effect at the enemy's current position and rotation
+            Destroy(explosion, 0.3f); // Destroy the explosion GameObject after 0.3 seconds (allows animation to play)
+            Destroy(gameObject); // Destroy this enemy GameObject
+            Debug.Log("Enemy hit by player and died"); // Print message to console for debugging purposes
+        }
     }
     
     void EnemyMovementSquare() // Function to move enemy in a square path pattern

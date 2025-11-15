@@ -9,6 +9,7 @@ A 2D space shooter game built with Unity where you control a player ship, shoot 
 - **Enemy Types**: Two different enemy types with unique movement patterns
 - **Lives System**: Start with 3 lives, represented by heart icons
 - **Score System**: Earn points by destroying enemies
+- **Power-Up System**: Collect health power-ups to restore lives and coins to earn points
 - **Visual Effects**: Explosion animations when enemies are destroyed
 - **Cloud Background**: Animated clouds that fall and loop
 - **Game Over Screen**: Displays final score and allows restart
@@ -23,11 +24,14 @@ A 2D space shooter game built with Unity where you control a player ship, shoot 
 ### Objective
 - Survive as long as possible
 - Destroy enemies to earn points
+- Collect coins to boost your score
+- Collect health power-ups to restore lives (max 3 lives)
 - Avoid colliding with enemies (you lose a life)
 - Game ends when you run out of all 3 lives
 
 ### Scoring
 - Destroying enemies awards points
+- Collecting coins awards 10 points each
 - Your final score is displayed on the Game Over screen
 
 ## 📁 Project Structure
@@ -40,6 +44,8 @@ Assets/
 │   ├── Enemy2.prefab
 │   ├── Bullet.prefab
 │   ├── Cloud.prefab
+│   ├── Coin.prefab
+│   ├── HealthItam.prefab
 │   └── explosian.prefab
 ├── Scripts/          # C# scripts
 │   ├── GameManager.cs          # Main game logic, spawning, lives, score
@@ -48,6 +54,8 @@ Assets/
 │   ├── Enemy2.cs                # Second enemy type behavior
 │   ├── Bullet.cs                # Bullet movement
 │   ├── Cloud.cs                 # Cloud movement and looping
+│   ├── Coin.cs                  # Coin collection and scoring
+│   ├── HealthPowerUp.cs         # Health power-up collection
 │   ├── GameOverManager.cs       # Game over screen logic
 │   ├── Barrier.cs               # Barrier collision handling
 │   └── Explosion.cs             # Explosion effect management
@@ -79,6 +87,8 @@ Assets/
      - Enemy prefab
      - Enemy2 prefab
      - Cloud prefab
+     - Coin prefab
+     - Health power-up prefab
    - Assign heart UI GameObjects (heart1, heart2, heart3)
 
 2. Create UI Canvas for hearts:
@@ -95,9 +105,10 @@ Assets/
 
 ### GameManager.cs
 - Manages game state (score, lives)
-- Handles enemy and cloud spawning
+- Handles enemy, cloud, and power-up spawning
 - Controls game over logic
 - Updates heart UI display
+- Manages power-up and coin spawning at random intervals
 
 ### PlayerController.cs
 - Handles player movement
@@ -119,6 +130,16 @@ Assets/
 - Automatic respawn at top when reaching bottom
 - Random size and opacity
 
+### Coin.cs
+- Coin collision detection with player
+- Awards 10 points when collected
+- Auto-destroys after 10 seconds if not collected
+
+### HealthPowerUp.cs
+- Health power-up collision detection with player
+- Restores one life when collected (max 3 lives)
+- Auto-destroys after 10 seconds if not collected
+
 ### GameOverManager.cs
 - Displays final score from PlayerPrefs
 - Handles restart functionality (R key)
@@ -130,18 +151,31 @@ Assets/
 - **Enemy Type 2**: Spawns every 5 seconds (starting after 5 seconds delay)
 - **Clouds**: Spawn every 5 seconds
 
+### Power-Up System
+- **Health Power-Ups**: Spawn randomly every 3-5 seconds
+  - Restore one life when collected (cannot exceed 3 lives)
+  - Auto-destroy after 10 seconds if not collected
+  - Spawn at random positions in the lower screen area
+- **Coins**: Spawn randomly every 3-5 seconds
+  - Award 10 points when collected
+  - Auto-destroy after 10 seconds if not collected
+  - Spawn at random positions in the lower screen area
+
 ### Lives System
 - Player starts with 3 lives
 - Each collision with an enemy reduces lives by 1
+- Collecting health power-ups restores lives (max 3)
 - Heart icons disappear as lives are lost
 - Game over triggers when lives reach 0
 
 ### Score System
 - Points awarded for destroying enemies
+- Points awarded for collecting coins (10 points each)
 - Score persists to Game Over screen via PlayerPrefs
 
-## Youtube Link
-https://youtube.com/shorts/ZyArnDNma9U
+## Youtube Links
+- **Original Gameplay**: https://youtube.com/shorts/ZyArnDNma9U
+- **Week 12 Submission**: https://youtube.com/shorts/qZ7ICzwtahQ
 
 ## Group Members
 Ethan Handler(just me)

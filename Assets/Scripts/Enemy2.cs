@@ -36,7 +36,7 @@ public class Enemy2 : MonoBehaviour // Enemy class inherits from MonoBehaviour (
             Destroy(gameObject); // Destroy this enemy GameObject
             Debug.Log("Enemy hit by bullet and died"); // Print message to console for debugging purposes
         }
-        // Die if hit by bullet
+        // Make player lose a life if hit by enemy
         else if(other.gameObject.CompareTag("Player")) // Check if the colliding object has the "Player" tag
         {
             other.GetComponent<PlayerController>().LoseALife(); // Get Player component from colliding object and call LoseALife method
@@ -65,5 +65,6 @@ public class Enemy2 : MonoBehaviour // Enemy class inherits from MonoBehaviour (
             squareSide = (squareSide + 1) % 4; // Cycle through 0,1,2,3 (modulo keeps it in range)
         }
     }
+   
 
 }

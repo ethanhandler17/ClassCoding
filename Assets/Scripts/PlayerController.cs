@@ -66,6 +66,13 @@ public class PlayerController : MonoBehaviour
             Debug.LogWarning("GameManager not found! Cannot lose a life."); // Print warning message to console
         }
     }
+    public void AddALife() // Method called when player collects a health power up
+    {
+        if(gameManager != null) // Check if GameManager reference exists
+        {
+            gameManager.AddALife(); // Call the GameManager's AddALife method to increment lives
+        }
+    }
 
 
 

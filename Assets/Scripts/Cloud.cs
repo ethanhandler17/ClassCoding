@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Cloud : MonoBehaviour
 {
-    private float speed = .5f;
+    private float speed = .00001f;
     private GameManager gameManager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

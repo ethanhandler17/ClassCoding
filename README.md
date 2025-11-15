@@ -143,6 +143,9 @@ Assets/
 ## Youtube Link
 https://youtube.com/shorts/ZyArnDNma9U
 
+## Group Members
+Ethan Handler(just me)
+
 
 ---
 

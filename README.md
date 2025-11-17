@@ -1,6 +1,6 @@
-# Unity Space Shooter Game
+# Unity Shooter Game
 
-A 2D space shooter game built with Unity where you control a player ship, shoot enemies, and try to survive as long as possible while scoring points.
+A 2D shooter game built with Unity where you control a player ship, shoot enemies, and try to survive as long as possible while scoring points.
 
 ## 🎮 Game Features
 
@@ -9,7 +9,9 @@ A 2D space shooter game built with Unity where you control a player ship, shoot 
 - **Enemy Types**: Two different enemy types with unique movement patterns
 - **Lives System**: Start with 3 lives, represented by heart icons
 - **Score System**: Earn points by destroying enemies
-- **Power-Up System**: Collect health power-ups to restore lives and coins to earn points
+- **Power-Up System**: Collect health power-ups to restore lives, shield power-ups for temporary invincibility, and coins to earn points
+- **Shield System**: Temporary invincibility that disables player collider and changes color for visual feedback
+- **Sound Effects**: Audio feedback for shooting, power-up collection, and game events
 - **Visual Effects**: Explosion animations when enemies are destroyed
 - **Cloud Background**: Animated clouds that fall and loop
 - **Game Over Screen**: Displays final score and allows restart
@@ -26,7 +28,8 @@ A 2D space shooter game built with Unity where you control a player ship, shoot 
 - Destroy enemies to earn points
 - Collect coins to boost your score
 - Collect health power-ups to restore lives (max 3 lives)
-- Avoid colliding with enemies (you lose a life)
+- Collect shield power-ups for temporary invincibility (lasts 3 seconds)
+- Avoid colliding with enemies (you lose a life, unless shield is active)
 - Game ends when you run out of all 3 lives
 
 ### Scoring
@@ -46,6 +49,7 @@ Assets/
 │   ├── Cloud.prefab
 │   ├── Coin.prefab
 │   ├── HealthItam.prefab
+│   ├── Shield.prefab
 │   └── explosian.prefab
 ├── Scripts/          # C# scripts
 │   ├── GameManager.cs          # Main game logic, spawning, lives, score
@@ -56,6 +60,7 @@ Assets/
 │   ├── Cloud.cs                 # Cloud movement and looping
 │   ├── Coin.cs                  # Coin collection and scoring
 │   ├── HealthPowerUp.cs         # Health power-up collection
+│   ├── Shield.cs                # Shield power-up collection
 │   ├── GameOverManager.cs       # Game over screen logic
 │   ├── Barrier.cs               # Barrier collision handling
 │   └── Explosion.cs             # Explosion effect management
@@ -89,9 +94,18 @@ Assets/
      - Cloud prefab
      - Coin prefab
      - Health power-up prefab
+     - Shield power-up prefab
    - Assign heart UI GameObjects (heart1, heart2, heart3)
 
-2. Create UI Canvas for hearts:
+2. Setup Player GameObject:
+   - Add `AudioSource` component to the player prefab
+   - In PlayerController component, assign:
+     - Shield material (for visual feedback when shield is active)
+     - Power-up sound AudioClip
+     - Power-down sound AudioClip
+     - Shoot sound AudioClip
+
+3. Create UI Canvas for hearts:
    - Create 3 Image GameObjects for hearts
    - Position them in the top-left corner
    - Assign them to GameManager's heart1, heart2, heart3 fields
@@ -115,6 +129,9 @@ Assets/
 - Manages shooting mechanics
 - Screen boundary constraints
 - Life loss communication with GameManager
+- Shield power-up activation and management
+- Sound effect playback for shooting and power-ups
+- Material changes for visual shield feedback
 
 ### Enemy.cs
 - First enemy type with horizontal bouncing movement
@@ -140,6 +157,11 @@ Assets/
 - Restores one life when collected (max 3 lives)
 - Auto-destroys after 10 seconds if not collected
 
+### Shield.cs
+- Shield power-up collision detection with player
+- Activates shield on PlayerController when collected
+- Auto-destroys after 10 seconds if not collected
+
 ### GameOverManager.cs
 - Displays final score from PlayerPrefs
 - Handles restart functionality (R key)
@@ -156,6 +178,14 @@ Assets/
   - Restore one life when collected (cannot exceed 3 lives)
   - Auto-destroy after 10 seconds if not collected
   - Spawn at random positions in the lower screen area
+  - Plays power-up sound when collected
+- **Shield Power-Ups**: Spawn randomly every 3-5 seconds
+  - Provides temporary invincibility (3 seconds duration)
+  - Disables player collider while active (prevents damage)
+  - Changes player color/material for visual feedback
+  - Auto-destroy after 10 seconds if not collected
+  - Spawn at random positions in the lower screen area
+  - Plays power-up sound when activated, power-down sound when deactivated
 - **Coins**: Spawn randomly every 3-5 seconds
   - Award 10 points when collected
   - Auto-destroy after 10 seconds if not collected
@@ -172,6 +202,14 @@ Assets/
 - Points awarded for destroying enemies
 - Points awarded for collecting coins (10 points each)
 - Score persists to Game Over screen via PlayerPrefs
+
+### Sound System
+- **Player Sounds**:
+  - Shooting sound plays when player fires bullets
+  - Power-up sound plays when collecting health or shield power-ups
+  - Power-down sound plays when shield deactivates
+- **AudioSource Component**: Required on player GameObject for sound playback
+- All sounds use `PlayOneShot()` for overlapping sound support
 
 ## Youtube Links
 - **Original Gameplay**: https://youtube.com/shorts/ZyArnDNma9U
